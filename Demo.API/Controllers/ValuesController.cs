@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Demo.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase
@@ -26,7 +27,7 @@ namespace Demo.API.Controllers
             return Ok(values);
         }
 
-
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetValue(int id)
         {
