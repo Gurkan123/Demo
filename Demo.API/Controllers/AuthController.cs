@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Demo.API.Data;
 using Demo.API.Dtos;
 using Demo.API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -18,12 +21,15 @@ namespace Demo.API.Controllers
     {
         private readonly IAuthRepository _repo;
         private readonly IConfiguration _config;
-        public AuthController(IAuthRepository repo, IConfiguration config)
+        private readonly IMapper _mapper;
+        public AuthController(IAuthRepository repo, IConfiguration config, IMapper mapper)
         {
+            _mapper = mapper;
             _config = config;
             _repo = repo;
         }
 
+        
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto)
         {
@@ -31,17 +37,20 @@ namespace Demo.API.Controllers
 
             userForRegisterDto.Username = userForRegisterDto.Username.ToLower();
 
+            if (userForRegisterDto.Role == "admin")
+            {
+                userForRegisterDto.CanUpdate = true;
+            }
+
             if (await _repo.UserExists(userForRegisterDto.Username))
                 return BadRequest("Username already exists");
 
-            var userToCreate = new User
-            {
-                Username = userForRegisterDto.Username
-            };
+            var userToCreate = _mapper.Map<User>(userForRegisterDto);
 
             var createdUser = await _repo.Register(userToCreate, userForRegisterDto.Password);
 
-            return StatusCode(201);
+            var userToReturn =  _mapper.Map<UserToReturnDto>(createdUser); 
+            return Ok(userToReturn);
         }
 
         [HttpPost("login")]
@@ -55,7 +64,9 @@ namespace Demo.API.Controllers
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
-                new Claim(ClaimTypes.Name, userFromRepo.Username)
+                new Claim(ClaimTypes.Name, userFromRepo.Username),
+                new Claim(ClaimTypes.Role, userFromRepo.Role),
+                new Claim("CanUpdate", userFromRepo.CanUpdate.ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8
@@ -74,9 +85,48 @@ namespace Demo.API.Controllers
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            return Ok(new {
-                token = tokenHandler.WriteToken(token)
+            var user = _mapper.Map<UserToReturnDto>(userFromRepo);
+
+            return Ok(new
+            {
+                token = tokenHandler.WriteToken(token),
+                user
             });
+        }
+
+        [Authorize]
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateUser(int id, UserForUpdateDto userForUpdateDto)
+        {
+            if ("True" != (User.FindFirst("canUpdate").Value))
+            {
+                if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                    return Unauthorized("You are not alllowed to do it.");
+            }
+
+            userForUpdateDto.Role = userForUpdateDto.Role.ToLower();
+            var userFromRepo = await _repo.GetUser(id);
+
+            _mapper.Map(userForUpdateDto, userFromRepo);
+            var userToReturn = _mapper.Map<UserToReturnDto>(userFromRepo);
+
+            if (await _repo.SaveAll())
+                return Ok(userToReturn);
+
+            throw new Exception($"Updating user {id} failed on save");
+        }
+
+        [Authorize]
+        [HttpGet("users")]
+        public async Task<IActionResult> GetUsers()
+        {
+
+            if ("True" != (User.FindFirst("canUpdate").Value))
+                return Unauthorized("You are not allowed to do it.");
+
+            var usersFromRepo = await _repo.GetUsers();
+
+            return Ok(usersFromRepo);
         }
     }
 }

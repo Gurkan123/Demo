@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Demo.API.Models;
 using Microsoft.EntityFrameworkCore;
@@ -68,6 +70,22 @@ namespace Demo.API.Data
                 return true;
 
             return false;
+        }
+
+        public async Task<User> GetUser(int id)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            return user;
+        }
+        public async Task<bool> SaveAll()
+        {
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<IEnumerable<User>> GetUsers()
+        {
+            var users =  await _context.Users.Where(u => u.Role != "admin").ToListAsync();
+            return users;
         }
     }
 }

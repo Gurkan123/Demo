@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Demo.API.Data;
 using Microsoft.AspNetCore.Authorization;
@@ -49,9 +50,24 @@ namespace Demo.API.Controllers
         }
 
         // DELETE api/values/5
+        
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> DeleteValue(int id)
         {
+            if ("user" == User.FindFirst(ClaimTypes.Role).Value)
+                return Unauthorized();
+            
+            var value = await _context.Values.FindAsync(id);
+
+            if (value == null)
+            {
+                return NotFound();
+            }
+
+            _context.Values.Remove(value);
+            await _context.SaveChangesAsync();
+
+            return Ok(value);
         }
     }
 }
