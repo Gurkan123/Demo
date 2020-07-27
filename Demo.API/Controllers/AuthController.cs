@@ -36,6 +36,8 @@ namespace Demo.API.Controllers
             // validate request
 
             userForRegisterDto.Username = userForRegisterDto.Username.ToLower();
+            userForRegisterDto.Role = userForRegisterDto.Role.ToLower();
+
 
             if (userForRegisterDto.Role == "admin")
             {
@@ -94,39 +96,6 @@ namespace Demo.API.Controllers
             });
         }
 
-        [Authorize]
-        [HttpPut("update/{id}")]
-        public async Task<IActionResult> UpdateUser(int id, UserForUpdateDto userForUpdateDto)
-        {
-            if ("True" != (User.FindFirst("canUpdate").Value))
-            {
-                if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-                    return Unauthorized("You are not alllowed to do it.");
-            }
-
-            userForUpdateDto.Role = userForUpdateDto.Role.ToLower();
-            var userFromRepo = await _repo.GetUser(id);
-
-            _mapper.Map(userForUpdateDto, userFromRepo);
-            var userToReturn = _mapper.Map<UserToReturnDto>(userFromRepo);
-
-            if (await _repo.SaveAll())
-                return Ok(userToReturn);
-
-            throw new Exception($"Updating user {id} failed on save");
-        }
-
-        [Authorize]
-        [HttpGet("users")]
-        public async Task<IActionResult> GetUsers()
-        {
-
-            if ("True" != (User.FindFirst("canUpdate").Value))
-                return Unauthorized("You are not allowed to do it.");
-
-            var usersFromRepo = await _repo.GetUsers();
-
-            return Ok(usersFromRepo);
-        }
+        
     }
 }

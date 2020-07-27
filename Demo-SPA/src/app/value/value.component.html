@@ -1,3 +1,10 @@
-<p *ngFor="let value of values">
-  {{value.id}}. {{value.name}}
-</p>
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-lg-2 col-md-3 col-sm-6">
+    <form *ngFor="let value of values" class="form-inline my-2 my-lg-0">
+      <p >{{value.id}}. {{value.name}}</p>
+      <button [disabled]="(role=='user') ? 'disabled': null" type="button" class="btn btn-danger btn-sm mx-2" type="submit" (click)="deleteValue(value.id)">Delete</button>
+    </form>
+    </div>
+  </div>
+</div>
