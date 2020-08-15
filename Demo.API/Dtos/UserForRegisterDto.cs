@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Demo.API.Models;
 
 namespace Demo.API.Dtos
 {
@@ -14,6 +15,7 @@ namespace Demo.API.Dtos
         [Required]
         public string Role { get; set; }
 
-        public bool CanUpdate { get; set; }
+        public Role Roles { get; set; }
+        public int RoleId { get; set; }
     }
 }

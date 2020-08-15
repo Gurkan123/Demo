@@ -84,7 +84,7 @@ namespace Demo.API.Data
 
         public async Task<IEnumerable<User>> GetUsers()
         {
-            var users =  await _context.Users.Where(u => u.Role != "admin").ToListAsync();
+            var users =  await _context.Users.ToListAsync();//admin olamayanları listele
             return users;
         }
     }

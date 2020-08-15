@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 export class NavComponent implements OnInit {
   model: any = {};
 
-  constructor(public authService: AuthService, 
+  constructor(public authService: AuthService,
     private router: Router) { }
 
   ngOnInit() {
@@ -32,7 +32,6 @@ export class NavComponent implements OnInit {
 
   logout() {
     localStorage.removeItem('token');
-    localStorage.removeItem('role');
     console.log('logged out');
     this.router.navigate(['/home']);
   }

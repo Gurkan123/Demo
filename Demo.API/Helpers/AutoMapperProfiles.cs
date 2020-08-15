@@ -12,7 +12,8 @@ namespace Demo.API.Helpers
             CreateMap<User, UserToReturnDto>().ReverseMap();
             CreateMap<UserForLoginDto, User>();
             CreateMap<UserForUpdateDto, User>();
-
+            CreateMap<ValueForPostDto, Value>();
+            CreateMap<RoleCreateDto, Role>();
 
         }
     }

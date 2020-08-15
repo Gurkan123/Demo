@@ -1,11 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Value } from '../_models/value';
 import { ValueService } from '../_services/value.service';
 import { Router } from '@angular/router';
-import { User } from '../_models/user';
-import { UserService } from '../_services/user.service';
 import { AuthService } from '../_services/auth.service';
-import { NgIf } from '@angular/common';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-value',
@@ -14,14 +12,12 @@ import { NgIf } from '@angular/common';
 })
 export class ValueComponent implements OnInit {
   values: Value[];
-  role: any;
+  model: any = {};
 
   constructor(private valueService: ValueService, private router: Router, private authService: AuthService) { }
 
   ngOnInit() {
     this.loadValue();
-    const role = localStorage.getItem('role');
-    console.log(role);
   }
 
   loadValue() {
@@ -35,6 +31,15 @@ export class ValueComponent implements OnInit {
   deleteValue(id: number) {
     this.valueService.deleteValue(id).subscribe(() => {
       this.loadValue();
+    });
+  }
+
+  postValue() {
+    this.valueService.postValue(this.model).subscribe((data) => {
+      console.log(data);
+      this.loadValue();
+    }, error => {
+      console.log('Error post');
     });
   }
 

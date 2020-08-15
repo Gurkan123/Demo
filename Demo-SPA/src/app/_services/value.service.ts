@@ -24,8 +24,12 @@ export class ValueService {
   return this.http.get<Value[]>(this.baseUrl + 'values', httpOptions);
 }
 
- deleteValue(id: number){
+ deleteValue(id: number) {
   return this.http.delete(this.baseUrl + 'values/' + id, httpOptions);
 }
+
+ postValue(model: any): Observable<any> {
+   return this.http.post(this.baseUrl + 'values', model, httpOptions);
+ }
 
 }

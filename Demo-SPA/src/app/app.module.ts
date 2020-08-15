@@ -14,16 +14,19 @@ import { RegisterComponent } from './register/register.component';
 import { UsersComponent } from './users/users.component';
 import { appRoutes } from './routes';
 import { AuthGuard } from './_guards/auth.guard';
+import { RoleComponent } from './role/role.component';
 
 
 @NgModule({
    declarations: [
       AppComponent,
       ValueComponent,
+      RoleComponent,
       NavComponent,
       HomeComponent,
       RegisterComponent,
-      UsersComponent
+      UsersComponent,
+      RoleComponent
    ],
    imports: [
       BrowserModule,

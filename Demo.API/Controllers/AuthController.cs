@@ -41,7 +41,17 @@ namespace Demo.API.Controllers
 
             if (userForRegisterDto.Role == "admin")
             {
-                userForRegisterDto.CanUpdate = true;
+                userForRegisterDto.RoleId = 1;
+            }
+
+            if (userForRegisterDto.Role == "manager")
+            {
+                userForRegisterDto.RoleId = 2;
+            }
+
+            if (userForRegisterDto.Role == "engineer")
+            {
+                userForRegisterDto.RoleId = 3;
             }
 
             if (await _repo.UserExists(userForRegisterDto.Username))
@@ -68,7 +78,7 @@ namespace Demo.API.Controllers
                 new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
                 new Claim(ClaimTypes.Name, userFromRepo.Username),
                 new Claim(ClaimTypes.Role, userFromRepo.Role),
-                new Claim("CanUpdate", userFromRepo.CanUpdate.ToString())
+                //new Claim("PermDelete", userFromRepo.Roles.Perm.CanValueDelete.ToString()),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8

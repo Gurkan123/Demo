@@ -21,7 +21,6 @@ login(model: any) {
       console.log(response);
       if (user) {
         localStorage.setItem('token', user.token);
-        localStorage.setItem('role', user.user.role);
         this.decodedToken = this.jwtHelper.decodeToken(user.token);
         console.log(this.decodedToken);
       }
@@ -35,7 +34,6 @@ register(model: any) {
 
 loggedIn() {
   const token = localStorage.getItem('token');
-  const role = localStorage.getItem('role');
   return !this.jwtHelper.isTokenExpired(token);
 }
 

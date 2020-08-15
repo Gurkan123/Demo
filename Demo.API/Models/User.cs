@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Demo.API.Models
 {
     public class User
@@ -7,7 +9,8 @@ namespace Demo.API.Models
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
         public string Role { get; set; }
-        public bool CanUpdate { get; set; }
+        public Role Roles { get; set; }
+        public int RoleId { get; set; }
         
     }
 }

@@ -26,11 +26,11 @@ namespace Demo.API.Controllers
         [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateUser(int id, UserForUpdateDto userForUpdateDto)
         {
-            if ("True" != (User.FindFirst("canUpdate").Value))
+           /* if ("True" != (User.FindFirst("canUpdate").Value))
             {
                 if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
                     return Unauthorized("You are not alllowed to do it.");
-            }
+            }*/
 
             userForUpdateDto.Role = userForUpdateDto.Role.ToLower();
             var userFromRepo = await _repo.GetUser(id);

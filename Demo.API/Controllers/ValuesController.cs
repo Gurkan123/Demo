@@ -2,7 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
 using Demo.API.Data;
+using Demo.API.Dtos;
+using Demo.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,8 +18,10 @@ namespace Demo.API.Controllers
     public class ValuesController : ControllerBase
     {
         private readonly DataContext _context;
-        public ValuesController(DataContext context)
+        private readonly IMapper _mapper;
+        public ValuesController(DataContext context, IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
 
         }
@@ -39,8 +44,26 @@ namespace Demo.API.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> PostValue(ValueForPostDto valueForPostDto)
         {
+            
+            /*var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            var permId = _context.Users.Find(userId).RoleId;
+
+
+            if (_context.Perms.Find(permId).CanValuePost != true)
+                return Unauthorized();*/
+            
+
+            var valueToCreate = _mapper.Map<Value>(valueForPostDto);
+
+            _context.Values.Add(valueToCreate);
+
+            await _context.SaveChangesAsync();
+
+            return Ok(valueToCreate);
+
         }
 
         // PUT api/values/5
@@ -50,13 +73,22 @@ namespace Demo.API.Controllers
         }
 
         // DELETE api/values/5
-        
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteValue(int id)
         {
-            if ("user" == User.FindFirst(ClaimTypes.Role).Value)
-                return Unauthorized();
-            
+            // if ("user" == User.FindFirst(ClaimTypes.Role).Value)
+            //  return Unauthorized();
+
+           /* var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            var permId = _context.Users.Find(userId).RoleId;
+
+
+            if (_context.Perms.Find(permId).CanValueDelete != true)
+                return Unauthorized();*/
+
+
             var value = await _context.Values.FindAsync(id);
 
             if (value == null)
