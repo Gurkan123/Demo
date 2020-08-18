@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Demo.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200814114515_InitialCreate")]
+    [Migration("20200817151547_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,7 +58,7 @@ namespace Demo.API.Migrations
 
                     b.HasIndex("PermId");
 
-                    b.ToTable("RolePerm");
+                    b.ToTable("RolePerms");
                 });
 
             modelBuilder.Entity("Demo.API.Models.User", b =>

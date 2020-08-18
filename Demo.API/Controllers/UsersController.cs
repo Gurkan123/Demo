@@ -44,7 +44,6 @@ namespace Demo.API.Controllers
             throw new Exception($"Updating user {id} failed on save");
         }
 
-        
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {

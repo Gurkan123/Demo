@@ -1,4 +1,30 @@
-<form #registerForm="ngForm" (ngSubmit)="register()">
+<div class="container mt-5">
+  <div class="row">
+    <form [formGroup]="registerForm" (ngSubmit)="register()">
+      <h2 class="text-center text-primary">Sign Up</h2>
+      <hr>
+
+      <div class="form-group">
+      <input type="text" class="form-control" required formControlName="username" placeholder="Username">
+      </div>
+
+      <div class="form-group">
+      <input type="password" class="form-control" required formControlName="password" placeholder="Password">
+      </div>
+
+      <div *ngFor= "let role of roles; let i=index">
+        <input type="checkbox" [value]="role.name" (click)="onCheckChange($event)">{{role.name}}
+        </div>
+
+      <div class="form-group text-center">
+        <button class="btn btn-success" type="submit">Register</button>
+        <button class="btn btn-default" type="button" (click)="cancel()">Cancel</button>
+      </div>
+      
+    
+  </form>
+
+<!--<form #registerForm="ngForm" (ngSubmit)="register()">
   <h2 class="text-center text-primary">Sign Up</h2>
   <hr>
 
@@ -13,10 +39,11 @@
   <div class="form-group">
     <input type="text" class="form-control" required name="role" [(ngModel)]="model.role" placeholder="Role">
   </div>
+  
 
   <div class="form-group text-center">
     <button class="btn btn-success" type="submit">Register</button>
     <button class="btn btn-default" type="button" (click)="cancel()">Cancel</button>
   </div>
   
-</form>
+</form>-->

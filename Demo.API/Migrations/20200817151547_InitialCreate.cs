@@ -47,7 +47,7 @@ namespace Demo.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RolePerm",
+                name: "RolePerms",
                 columns: table => new
                 {
                     RoleId = table.Column<int>(nullable: false),
@@ -55,15 +55,15 @@ namespace Demo.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RolePerm", x => new { x.RoleId, x.PermId });
+                    table.PrimaryKey("PK_RolePerms", x => new { x.RoleId, x.PermId });
                     table.ForeignKey(
-                        name: "FK_RolePerm_Perms_PermId",
+                        name: "FK_RolePerms_Perms_PermId",
                         column: x => x.PermId,
                         principalTable: "Perms",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RolePerm_Roles_RoleId",
+                        name: "FK_RolePerms_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
                         principalColumn: "Id",
@@ -94,8 +94,8 @@ namespace Demo.API.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_RolePerm_PermId",
-                table: "RolePerm",
+                name: "IX_RolePerms_PermId",
+                table: "RolePerms",
                 column: "PermId");
 
             migrationBuilder.CreateIndex(
@@ -107,7 +107,7 @@ namespace Demo.API.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "RolePerm");
+                name: "RolePerms");
 
             migrationBuilder.DropTable(
                 name: "Users");

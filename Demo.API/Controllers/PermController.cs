@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -15,66 +14,64 @@ namespace Demo.API.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class PermController : ControllerBase
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
-        public ValuesController(DataContext context, IMapper mapper)
+        public PermController(DataContext context, IMapper mapper)
         {
             _mapper = mapper;
             _context = context;
 
         }
         [HttpGet]
-        public async Task<IActionResult> GetValues()
+        public async Task<IActionResult> GetPerms()
         {
-            var values = await _context.Values.ToListAsync();
-            return Ok(values);
+            var perms = await _context.Perms.ToListAsync();
+            return Ok(perms);
         }
 
         // POST api/values
         [HttpPost]
-        public async Task<IActionResult> PostValue(ValueForPostDto valueForPostDto)
+        public async Task<IActionResult> PostValue(PermForPostDto permForPostDto)
         {
-            
-            var yetki = AuthorizeControl("ValuePost");
+            var yetki = AuthorizeControl("PermPost");
 
             if (yetki == false)
                 return Unauthorized();
-            
 
-            var valueToCreate = _mapper.Map<Value>(valueForPostDto);
+            var permToCreate = _mapper.Map<Perm>(permForPostDto);
 
-            _context.Values.Add(valueToCreate);
+            _context.Perms.Add(permToCreate);
 
             await _context.SaveChangesAsync();
 
-            return Ok(valueToCreate);
+            return Ok(permToCreate);
 
         }
+
 
         // DELETE api/values/5
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteValue(int id)
+        public async Task<IActionResult> DeletePerm(int id)
         {
-            var yetki = AuthorizeControl("ValueDelete");
+            var yetki = AuthorizeControl("PermDelete");
 
             if (yetki == false)
                 return Unauthorized();
 
+            var perm = await _context.Perms.FindAsync(id);
 
-            var value = await _context.Values.FindAsync(id);
-
-            if (value == null)
+            if (perm == null)
             {
                 return NotFound();
             }
 
-            _context.Values.Remove(value);
+            _context.Perms.Remove(perm);
             await _context.SaveChangesAsync();
 
-            return Ok(value);
+            return Ok(perm);
         }
 
         public bool AuthorizeControl(string permission)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,46 +23,47 @@ namespace Demo.API.Controllers
         private readonly IAuthRepository _repo;
         private readonly IConfiguration _config;
         private readonly IMapper _mapper;
-        public AuthController(IAuthRepository repo, IConfiguration config, IMapper mapper)
+        private readonly DataContext _context;
+        public AuthController(IAuthRepository repo, IConfiguration config, IMapper mapper, DataContext context)
         {
+            _context = context;
             _mapper = mapper;
             _config = config;
             _repo = repo;
         }
 
-        
+
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto)
         {
             // validate request
 
             userForRegisterDto.Username = userForRegisterDto.Username.ToLower();
-            userForRegisterDto.Role = userForRegisterDto.Role.ToLower();
+
+            var roleName = userForRegisterDto.Role[0];
 
 
-            if (userForRegisterDto.Role == "admin")
+            var roleNameList = _context.Roles.Where(r => r.Name == roleName).ToList();
+
+            var roleId = 0;
+
+            foreach (var item in roleNameList)
             {
-                userForRegisterDto.RoleId = 1;
+                roleId = item.Id;
             }
+            userForRegisterDto.RoleId = roleId;
 
-            if (userForRegisterDto.Role == "manager")
-            {
-                userForRegisterDto.RoleId = 2;
-            }
-
-            if (userForRegisterDto.Role == "engineer")
-            {
-                userForRegisterDto.RoleId = 3;
-            }
 
             if (await _repo.UserExists(userForRegisterDto.Username))
                 return BadRequest("Username already exists");
 
             var userToCreate = _mapper.Map<User>(userForRegisterDto);
 
+            
+
             var createdUser = await _repo.Register(userToCreate, userForRegisterDto.Password);
 
-            var userToReturn =  _mapper.Map<UserToReturnDto>(createdUser); 
+            var userToReturn = _mapper.Map<UserToReturnDto>(createdUser);
             return Ok(userToReturn);
         }
 
@@ -106,6 +108,6 @@ namespace Demo.API.Controllers
             });
         }
 
-        
+
     }
 }

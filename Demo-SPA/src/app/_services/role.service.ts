@@ -20,11 +20,23 @@ export class RoleService {
 constructor(private http: HttpClient) { }
 
 getPerms(): Observable<Perm[]> {
-  return this.http.get<Perm[]>(this.baseUrl + 'role', httpOptions);
+  return this.http.get<Perm[]>(this.baseUrl + 'perm', httpOptions);
+}
+
+deletePerm(id: number){
+  return this.http.delete<Perm[]>(this.baseUrl + 'perm/' + id, httpOptions);
+}
+
+postPerm(model: any): Observable<any> {
+  return this.http.post(this.baseUrl + 'perm', model, httpOptions);
 }
 
 postRole(model: any): Observable<any> {
-  return this.http.post(this.baseUrl + 'role', model, httpOptions);
+  return this.http.post(this.baseUrl + 'role/role', model, httpOptions);
+}
+
+postRolePerm(model: any): Observable<any> {
+  return this.http.post(this.baseUrl + 'role/roleperm', model, httpOptions);
 }
 
 }

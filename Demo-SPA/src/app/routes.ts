@@ -4,6 +4,7 @@ import { ValueComponent } from './value/value.component';
 import { UsersComponent } from './users/users.component';
 import { AuthGuard } from './_guards/auth.guard';
 import { RoleComponent } from './role/role.component';
+import { PermComponent } from './perm/perm.component';
 
 
 
@@ -17,6 +18,7 @@ export const appRoutes: Routes = [
             { path: 'values', component: ValueComponent},
             { path: 'users', component: UsersComponent},
             { path: 'role', component: RoleComponent},
+            { path: 'perm', component: PermComponent}
         ]
     },
     { path: '**', redirectTo: '', pathMatch: 'full'},

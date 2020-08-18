@@ -12,7 +12,7 @@ namespace Demo.API.Data
         public DbSet<User> Users { get; set; }  
         public DbSet<Role> Roles { get; set; }
         public DbSet<Perm> Perms { get; set; } 
-
+        public DbSet<RolePerm> RolePerms { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<User>()

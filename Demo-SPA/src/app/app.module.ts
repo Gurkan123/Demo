@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
@@ -15,10 +15,11 @@ import { UsersComponent } from './users/users.component';
 import { appRoutes } from './routes';
 import { AuthGuard } from './_guards/auth.guard';
 import { RoleComponent } from './role/role.component';
+import { PermComponent } from './perm/perm.component';
 
 
 @NgModule({
-   declarations: [
+   declarations: [	
       AppComponent,
       ValueComponent,
       RoleComponent,
@@ -26,12 +27,14 @@ import { RoleComponent } from './role/role.component';
       HomeComponent,
       RegisterComponent,
       UsersComponent,
-      RoleComponent
+      RoleComponent,
+      PermComponent
    ],
    imports: [
       BrowserModule,
       HttpClientModule,
       FormsModule,
+      ReactiveFormsModule,
       RouterModule.forRoot(appRoutes)
    ],
    providers: [

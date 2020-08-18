@@ -56,7 +56,7 @@ namespace Demo.API.Migrations
 
                     b.HasIndex("PermId");
 
-                    b.ToTable("RolePerm");
+                    b.ToTable("RolePerms");
                 });
 
             modelBuilder.Entity("Demo.API.Models.User", b =>

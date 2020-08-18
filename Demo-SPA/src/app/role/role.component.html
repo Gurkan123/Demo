@@ -1,6 +1,27 @@
 <div class="container mt-5">
   <div class="row">
-    <form #editform="ngForm" id="editForm" (ngSubmit)="postRole()">
+    <form [formGroup]="permissionForm" (ngSubmit)="postRole()">
+
+      <div class="form-group mt-4 mr-2">
+        <input type="text" class="form-control" formControlName="roleName">
+      </div>
+
+        
+
+    <div class="form-group">
+      <label for="exampleFormControlSelect2">Permission</label>
+
+
+      <div *ngFor= "let perm of perms; let i=index">
+      <input type="checkbox" [value]="perm.id" (click)="onCheckChange($event)">{{perm.name}}
+      </div>
+    </div>
+  <div class="form-group">
+    <button class="btn btn-success" type="submit">Create</button>
+  </div>
+</form>
+
+    <!-- <form #editform="ngForm" id="editForm" (ngSubmit)="postRole()">
 
       <div class="form-group mt-4 mr-2">
         <input type="text" class="form-control" name="name" [(ngModel)]="model.name">
@@ -12,11 +33,11 @@
 
     <div class="form-group">
       <label for="exampleFormControlSelect2">Permission</label>
-      <select multiple class="form-control" id="exampleFormControlSelect2">
-        <option *ngFor= "let perm of perms" value="{{perm.id}}">{{perm.name}}</option>
+      <select multiple class="form-control" name="id" [(ngModel)]="model.id">
+        <option *ngFor= "let perm of perms" [value]="perm.name">{{perm.name}}</option>
       </select>
     </div>
-  </form>
+  </form> -->
 
   </div>
 </div>

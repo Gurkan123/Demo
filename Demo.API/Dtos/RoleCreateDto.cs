@@ -6,7 +6,7 @@ namespace Demo.API.Dtos
 {
     public class RoleCreateDto
     {
-        public string Name { get; set; }
-        public List<Perm> Perms { get; set; }
+        public string RoleName { get; set; }
+        public string[] Permissions { get; set; }
     }
 }

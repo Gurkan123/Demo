@@ -13,7 +13,8 @@ namespace Demo.API.Helpers
             CreateMap<UserForLoginDto, User>();
             CreateMap<UserForUpdateDto, User>();
             CreateMap<ValueForPostDto, Value>();
-            CreateMap<RoleCreateDto, Role>();
+            CreateMap<PermForPostDto, Perm>();
+
 
         }
     }
